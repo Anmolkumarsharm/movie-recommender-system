@@ -54,7 +54,7 @@ if os.path.exists(output):
 else:
     st.error("Similarity file download nahi ho paayi. App aage nahi chal sakti.")
 
-st.title('Movie Recommender System')
+st.title('Movie Recommender System by Anmol kumar sharma')
 
 
 selected_movie_name = st.selectbox(
