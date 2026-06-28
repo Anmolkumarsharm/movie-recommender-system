@@ -29,12 +29,30 @@ def recommend(movie):
 movie_dict = pickle.load(open('movie_dict.pkl','rb'))
 movies = pd.DataFrame(movie_dict)
 
-import bz2
+import os
+import gdown
 import pickle
+import streamlit as st
 
-# Open the compressed similarity matrix
-with bz2.BZ2File('similarity.pbz2', 'rb') as f:
-    similarity = pickle.load(f)
+# 1. Aapki file ID bilkul sahi hai
+file_id = '1nO1yScW3avi5dMnHP4rCjCz-RNz9rfVs'
+output = 'similarity.pkl'
+
+# 2. Agar file nahi hai, toh download karenge
+if not os.path.exists(output):
+    with st.spinner("Recommendation engine load ho raha hai... Isme 1-2 minute lag sakte hain, please wait!"):
+        try:
+            # Yeh gdown ka sabse naya aur full-proof tarika hai file ID se download karne ka
+            gdown.download(id=file_id, output=output, quiet=False)
+        except Exception as e:
+            st.error(f"Model download karne mein dikkat aayi: {e}")
+            st.info("Please check karein ki aapka Google Drive link 'Anyone with the link' par set hai ya nahi.")
+
+# 3. Model ko load karo
+if os.path.exists(output):
+    similarity = pickle.load(open(output, 'rb'))
+else:
+    st.error("Similarity file download nahi ho paayi. App aage nahi chal sakti.")
 
 st.title('Movie Recommender System')
 
