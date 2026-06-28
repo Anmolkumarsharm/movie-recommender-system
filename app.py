@@ -29,7 +29,12 @@ def recommend(movie):
 movie_dict = pickle.load(open('movie_dict.pkl','rb'))
 movies = pd.DataFrame(movie_dict)
 
-similarity= pickle.load(open('similarity.pkl','rb'))
+import bz2
+import pickle
+
+# Open the compressed similarity matrix
+with bz2.BZ2File('similarity.pbz2', 'rb') as f:
+    similarity = pickle.load(f)
 
 st.title('Movie Recommender System')
 
